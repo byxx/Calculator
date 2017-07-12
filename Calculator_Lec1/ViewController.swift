@@ -25,28 +25,36 @@ class ViewController: UIViewController {
         }
     }
     
-    
-
-    @IBAction func performOperation(_ sender: UIButton) {
-        userIsInTheMiddleOfTyping = false
-        let operand = sender.currentTitle!
-        
-        //Casting von String in Double
-        switch operand {
-        case "π":
-        display.text = "3.14"
-            
-            //Checken!!
-        case "√":
-            let rootValue = Double(operand)
-            let rootResult = sqrt(rootValue!)
-            display.text = String(rootResult)
-            
-        default:
-            break
-        }
+    //Computed Property converts only
+    var displayValue: Double {
+    get {
+    return Double(display.text!)!
     }
+    set {
+    display.text! = String(newValue)
+    }
+    }
+
+    private var brain = CalculatorBrain()
     
     
+    @IBAction func performOperation(_ sender: UIButton) {
+       
+        if userIsInTheMiddleOfTyping {
+            brain.setOperand(displayValue)
+            userIsInTheMiddleOfTyping = false
+        }
+        
+        if let mathematicalSymbol = sender.currentTitle {
+        brain.performOperation(mathematicalSymbol)
+        }
+        if let result = brain.result {
+        displayValue = result
+    }
+        
+        //end of PerformOperation()
+    
+    
+}
 }
 
